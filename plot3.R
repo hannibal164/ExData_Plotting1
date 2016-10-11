@@ -1,5 +1,6 @@
 library(data.table)
 library(dplyr)
+library(reshape2)
 
 ##Download zip folder and unzip. This step reads the data into R
 
@@ -19,15 +20,17 @@ hpc<- hpc%>%
 hpc$Datetime <- paste(hpc$Date, hpc$Time)
 hpc$Datetime <- as.POSIXct( strptime(hpc$Datetime, "%d/%m/%Y %H:%M:%S"))
 
-#Change global active power to numeric for plot2
-hpc$Global_active_power <- as.numeric(hpc$Global_active_power)
+#Change sub metering to numeric for plot3
+hpc$Sub_metering_1 <- as.numeric(hpc$Sub_metering_1)
+hpc$Sub_metering_2 <- as.numeric(hpc$Sub_metering_2)
+hpc$Sub_metering_3 <- as.numeric(hpc$Sub_metering_3)
 
 
 #Set png parameters. Default is already 480x480 for pixels, but making it clear here.
-png(filename = "plot2.png", width = 480, height = 480)
-plot(hpc$Global_active_power ~ hpc$Datetime 
-	,ylab="Global Active Power (kilowatts)"
-	,xlab =""
-	,type = "l"
-		)
+png(filename = "plot3.png", width = 480, height = 480)
+#Build plot
+plot(hpc$Sub_metering_1~ hpc$Datetime ,type = "s", col ="black",xlab="",ylab="Energy sub meeting")
+lines(hpc$Sub_metering_2~ hpc$Datetime ,col = "red", type = "s")
+lines(hpc$Sub_metering_3~ hpc$Datetime ,col = "blue", type = "s")	
+legend("topright",c("Sub_metering_1","Sub_metering_2","Sub_metering_3"), lty=c(1,1), col =c("black","red","blue"))		
 dev.off()

@@ -10,7 +10,7 @@ data <- unzip(temp, "household_power_consumption.txt")
 hpc<-fread(data)
 unlink(temp)
 
-#convert Date column to date format and remove times
+#convert Date column to date format
 
 hpc$Date <- format(as.POSIXct(hpc$Date,format='%d/%m/%Y'),format='%d/%m/%Y')
 
